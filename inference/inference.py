@@ -33,7 +33,7 @@ def run_inference():
         sys.exit(1)
 
     logging.info("Loading the trained model...")
-    model = SimpleNN(input_size=4, output_size=3)  # Adjust input/output sizes if needed
+    model = SimpleNN(input_size=4, output_size=3)  
     try:
         model.load_state_dict(torch.load(MODEL_PATH))
     except Exception as e:
