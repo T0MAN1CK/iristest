@@ -1,0 +1,26 @@
+# Python
+*.pyc
+__pycache__/
+venv/
+env/
+
+# Docker
+*.pid
+*.log
+.env
+
+# Generated files
+data/
+models/
+results/
+
+# IDE-specific
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+
+# Logs and temp files
+*.log
+*.tmp
