@@ -10,7 +10,6 @@ env/
 .env
 
 # Generated files
-data/
 models/
 results/
 
