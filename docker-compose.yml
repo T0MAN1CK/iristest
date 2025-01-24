@@ -18,6 +18,8 @@ services:
       - ./data:/app/data
       - ./models:/app/models
       - ./results:/app/results
+    depends_on:
+      - data_preparation
 
   inference:
     build:
@@ -28,3 +30,5 @@ services:
       - ./data:/app/data
       - ./models:/app/models
       - ./results:/app/results
+    depends_on:
+      - training

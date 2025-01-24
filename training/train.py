@@ -8,6 +8,7 @@ import os
 import logging
 import sys
 from sklearn.metrics import accuracy_score
+import time
 
 # Add the project root directory to the Python path for imports
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
@@ -71,6 +72,12 @@ def train_model():
 
     logging.info("Training the Neural Network...")
     num_epochs = 10
+    best_loss = float('inf')
+    patience = 3
+    trigger_times = 0
+
+    start_time = time.time()
+
     for epoch in range(num_epochs):
         model.train()
         total_loss = 0
@@ -81,7 +88,21 @@ def train_model():
             loss.backward()
             optimizer.step()
             total_loss += loss.item()
-        logging.info(f"Epoch {epoch + 1}/{num_epochs}, Loss: {total_loss / len(train_loader)}")
+        
+        avg_loss = total_loss / len(train_loader)
+        logging.info(f"Epoch {epoch + 1}/{num_epochs}, Loss: {avg_loss}")
+        
+        if avg_loss < best_loss:
+            best_loss = avg_loss
+            trigger_times = 0
+        else:
+            trigger_times += 1
+            if trigger_times >= patience:
+                logging.info("Early stopping triggered")
+                break
+
+    end_time = time.time()
+    logging.info(f"Training completed in {end_time - start_time:.2f} seconds")
 
     # Evaluate the model
     logging.info("Evaluating the model on the test dataset...")

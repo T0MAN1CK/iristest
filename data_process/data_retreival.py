@@ -25,13 +25,22 @@ def download_and_split_data():
     logging.info("Downloading the Iris dataset...")
     url = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
     columns = ["sepal_length", "sepal_width", "petal_length", "petal_width", "class"]
-    iris_data = pd.read_csv(url, header=None, names=columns)
+
+    try:
+        iris_data = pd.read_csv(url, header=None, names=columns)
+    except Exception as e:
+        logging.error(f"Failed to download data: {e}")
+        sys.exit(1)
 
     logging.info("Splitting the dataset into train and inference sets...")
     train_data, inference_data = train_test_split(iris_data, test_size=0.2, random_state=42)
 
-    train_data.to_csv(TRAIN_PATH, index=False)
-    inference_data.to_csv(INFERENCE_PATH, index=False)
+    try:
+        train_data.to_csv(TRAIN_PATH, index=False)
+        inference_data.to_csv(INFERENCE_PATH, index=False)
+    except Exception as e:
+        logging.error(f"Failed to save data: {e}")
+        sys.exit(1)
 
     logging.info(f"Training data saved to {TRAIN_PATH}")
     logging.info(f"Inference data saved to {INFERENCE_PATH}")
