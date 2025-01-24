@@ -1,34 +1,30 @@
-version: '3.8'
+version: "3.8"
 
 services:
   data_preparation:
     build:
       context: .
-      dockerfile: data_process/Dockerfile
+      dockerfile: ./data_process/Dockerfile
+    command: python data_process/data_retreival.py
     volumes:
-      - ./data:/app/data  # Share data directory
-    container_name: data_preparation_container
+      - ./data:/app/data
 
   training:
     build:
       context: .
-      dockerfile: training/Dockerfile
-    depends_on:
-      - data_preparation  # Ensure data preparation runs first
+      dockerfile: ./training/Dockerfile
+    command: python training/train.py
     volumes:
-      - ./data:/app/data  # Share data directory
-      - ./models:/app/models  # Persist models
-      - ./results:/app/results  # Persist results
-    container_name: training_container
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./results:/app/results
 
   inference:
     build:
       context: .
-      dockerfile: inference/Dockerfile
-    depends_on:
-      - training  # Ensure training runs after training
+      dockerfile: ./inference/Dockerfile
+    command: python inference/inference.py
     volumes:
-      - ./data:/app/data  # Access data files
-      - ./models:/app/models  # Access trained models
-      - ./results:/app/results  # Persist inference results
-    container_name: inference_container
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./results:/app/results
