@@ -38,5 +38,6 @@ This project trains a machine learning model on the Iris dataset and runs batch 
     models/: Contains the trained model (iris_model.pth).
     results/: Contains training scores (training_scores.txt) and inference results (inference_results.csv).
     
-
+# General details
+Data file is uploaded on Git just in case. after running docker compose, data file should appear itself in the project directory. Before running the data, one is free to get rid of data folder
     
