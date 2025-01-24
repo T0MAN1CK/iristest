@@ -19,7 +19,7 @@ services:
       - ./models:/app/models
       - ./results:/app/results
     depends_on:
-      - data_preparation 
+      - data_preparation
 
   inference:
     build:
@@ -28,7 +28,7 @@ services:
     command: python inference/inference.py
     volumes:
       - ./data:/app/data
-      - ./models:/app/models  
+      - ./models:/app/models
       - ./results:/app/results
     depends_on:
-      - training  
+      - training

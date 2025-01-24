@@ -10,7 +10,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Import utilities and the SimpleNN model from the training module
 from utils import configure_logging, get_project_dir
-from training.train import SimpleNN  # Adjusted import path for SimpleNN
+from training.train import SimpleNN
 
 # Configure logging
 configure_logging()
@@ -33,7 +33,7 @@ def run_inference():
         sys.exit(1)
 
     logging.info("Loading the trained model...")
-    model = SimpleNN(input_size=4, output_size=3)  
+    model = SimpleNN(input_size=4, output_size=3)
     try:
         model.load_state_dict(torch.load(MODEL_PATH))
     except Exception as e:
@@ -42,6 +42,10 @@ def run_inference():
     model.eval()
 
     logging.info("Loading inference data...")
+    if not os.path.exists(INFERENCE_FILE):
+        logging.error(f"Inference data file not found at {INFERENCE_FILE}")
+        sys.exit(1)
+        
     inference_data = pd.read_csv(INFERENCE_FILE)
     X_inference = inference_data.iloc[:, :-1].values  # Exclude the target column
 
