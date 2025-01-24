@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Iris Dataset Project
 
 This project trains a machine learning model on the Iris dataset and runs batch inference in a modularized and containerized setup.
@@ -19,3 +20,5 @@ This project trains a machine learning model on the Iris dataset and runs batch 
     python training/train.py
     python inference/run.py
 a
+=======
+
