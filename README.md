@@ -35,11 +35,8 @@ This project trains a machine learning model on the Iris dataset and runs batch 
    docker run --rm -v "$(pwd)/data:/app/data" --name iristest-data_preparation iristest-data_preparation
    docker run --rm -v "$(pwd)/data:/app/data" -v "$(pwd)/models:/app/models" -v "$(pwd)/results:/app/results" --name iristest-training iristest-training
    docker run --rm -v "$(pwd)/data:/app/data" -v "$(pwd)/models:/app/models" -v "$(pwd)/results:/app/results" --name iristest-inference iristest-inference
- **Start the Workflown with compose yml**:
-   This approach is supposed to have the same results, but inference service might be missed since it is dependent on training output, namely, models directory. docker-compose.yml has dependencies for inference on training, but it might still be problematic, if the inference is commenced before training container had finished running completely.
-    ```bash
-    docker-compose up --build
 3. **Inspecting logs**:
+ below is the command to view logs, but the commands above remove container as soon as they finish running. to save logs, skip '-rm' part in running commands above, and use the command below to inspect logs saved in containers.  
    ```bash
     docker logs iristest-<name of container>
 4. **Generated Files**: 
