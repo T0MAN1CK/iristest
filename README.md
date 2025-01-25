@@ -48,6 +48,7 @@ This project trains a machine learning model on the Iris dataset and runs batch 
      ```
 
 3. **Inspect Logs**:
+   Commands above remove containers when they finish running. Logs cannot be inspected if containers are removed. If inspection is needed, run the commands above withour (--rm) so that containers are kept. 
    To check the logs of a specific container after it runs:
    ```bash
    docker logs <container_name>
