@@ -26,8 +26,18 @@ This project trains a machine learning model on the Iris dataset and runs batch 
    ```bash
    git clone git@github.com:T0MAN1CK/iristest.git
    cd iristest
-2. **Start the Workflow**:
+2. **Start workflow separately for each container**:
+    Run the following commands one by one:
    ```bash
+   docker build -t iristest-data_preparation -f data_process/Dockerfile .
+   docker build -t iristest-training -f training/Dockerfile .
+   docker build -t iristest-inference -f inference/Dockerfile .
+   docker run --rm -v "$(pwd)/data:/app/data" --name iristest-data_preparation iristest-data_preparation
+   docker run --rm -v "$(pwd)/data:/app/data" -v "$(pwd)/models:/app/models" -v "$(pwd)/results:/app/results" --name iristest-training iristest-training
+   docker run --rm -v "$(pwd)/data:/app/data" -v "$(pwd)/models:/app/models" -v "$(pwd)/results:/app/results" --name iristest-inference iristest-inference
+ **Start the Workflown with compose yml**:
+   This approach is supposed to have the same results, but inference service might be missed since it is dependent on training output, namely, models directory. docker-compose.yml has dependencies for inference on training, but it might still be problematic, if the inference is commenced before training container had finished running completely.
+    ```bash
     docker-compose up --build
 3. **Inspecting logs**:
    ```bash
