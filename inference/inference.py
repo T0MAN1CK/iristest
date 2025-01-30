@@ -3,13 +3,14 @@ import os
 import logging
 import pandas as pd
 import torch
+import time
 
 # Add the project root directory to the Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Import utilities and the SimpleNN model from the training module
 from utils import configure_logging, get_project_dir
-from training.train import SimpleNN  # Adjusted import path for SimpleNN
+from training.train import SimpleNN
 
 # Configure logging
 configure_logging()
@@ -27,13 +28,24 @@ os.makedirs(RESULTS_DIR, exist_ok=True)
 
 def run_inference():
     """Run inference using the trained model."""
+    if not os.path.exists(MODEL_PATH):
+        logging.error(f"Model file not found at {MODEL_PATH}")
+        sys.exit(1)
+
     logging.info("Loading the trained model...")
-    # Define the model architecture (ensure it matches the one used in train.py)
-    model = SimpleNN(input_size=4, output_size=3)  # Adjust input/output sizes if needed
-    model.load_state_dict(torch.load(MODEL_PATH))
+    model = SimpleNN(input_size=4, output_size=3)
+    try:
+        model.load_state_dict(torch.load(MODEL_PATH))
+    except Exception as e:
+        logging.error(f"Failed to load model: {e}")
+        sys.exit(1)
     model.eval()
 
     logging.info("Loading inference data...")
+    if not os.path.exists(INFERENCE_FILE):
+        logging.error(f"Inference data file not found at {INFERENCE_FILE}")
+        sys.exit(1)
+        
     inference_data = pd.read_csv(INFERENCE_FILE)
     X_inference = inference_data.iloc[:, :-1].values  # Exclude the target column
 
@@ -41,9 +53,13 @@ def run_inference():
     X_inference_tensor = torch.tensor(X_inference, dtype=torch.float32)
 
     logging.info("Running inference...")
+    start_time = time.time()
     with torch.no_grad():
         predictions = model(X_inference_tensor)
         predicted_classes = torch.argmax(predictions, axis=1).numpy()
+
+    end_time = time.time()
+    logging.info(f"Inference completed in {end_time - start_time:.2f} seconds")
 
     logging.info("Saving inference results...")
     inference_data['predicted_class'] = predicted_classes
